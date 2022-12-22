@@ -1,11 +1,16 @@
 import click
 from time_decorator import log
-from pizza_classes import PizzaBase, Margherita, Hawaiian, Pepperoni, Size
+from pizza_classes import PizzaBase, Margherita, Hawaiian, Pepperoni
 
 MENU = {
     "Margherita": Margherita(),
     "Pepperoni": Pepperoni(),
     "Hawaiian": Hawaiian()
+}
+
+SIZES = {
+    "L": 1,
+    "XL": 2
 }
 
 
@@ -27,29 +32,26 @@ def cli():
 @cli.command()
 @click.option(
     "--delivery",
-    "is_delivered",
+    "is_delivery_needed",
     default=False,
     is_flag=True,
     help="Do you want to deliver your order?",
 )
 @click.option("--size", default="L", help="What size do you want?")
 @click.argument("pizza", nargs=1)
-def order(pizza: str, size: str, is_delivered: bool):
+def order(pizza: str, size: str, is_delivery_needed: bool):
     """Bakes and deliveres pizza if needed."""
 
     if pizza not in MENU.keys():
         print("We dont have such pizza\n"f'Choose between: {", ".join(MENU.keys())}')
         return
-    try:
-        Size[size].value
-    except KeyError:
+    if size not in SIZES.keys():
         print("We dont have such pizza size.\nTry L or XL")
         return
     bake(MENU[pizza])
-    if is_delivered:
+    if is_delivery_needed:
         delivery(MENU[pizza])
-    else:
-        print("Enjoy your pizza.")
+    print("Enjoy your pizza.")
 
 
 @cli.command()

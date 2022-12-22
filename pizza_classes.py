@@ -28,7 +28,6 @@ class PizzaBase:
 
     @size.setter
     def size(self, new_size: str) -> None:
-        """This weird setter checkup is how it is made in EAFP, lol."""
         try:
             self._size = Size[new_size]
             if self._size != new_size:
